@@ -1,0 +1,118 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../prisma/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id          String       @id @default(uuid())
+  googleId    String?
+  email       String       @unique
+  username    String
+  password    String
+  firstName   String?
+  lastName    String?
+  role        String       @default("user")
+  hasPaid     Boolean      @default(false)
+  userCompany UserCompany?
+  clients     Client[]
+  invoices    Invoice[]
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+model UserCompany {
+  id          String   @id @default(uuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  name        String
+  taxId       String?
+  address     String
+  email       String?
+  phoneNumber String?
+  website     String?
+  logo        String?
+  industry    String?
+  companySize Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Client {
+  id              String    @id @default(uuid())
+  userId          String
+  user            User      @relation(fields: [userId], references: [id])
+  name            String
+  email           String?
+  phoneNumber     String?
+  billingAddress  String?
+  shippingAddress String?
+  contactPerson   String?
+  invoices        Invoice[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+}
+
+model Invoice {
+  id           String            @id @default(uuid())
+  clientId     String
+  userId       String
+  client       Client            @relation(fields: [clientId], references: [id])
+  user         User              @relation(fields: [userId], references: [id])
+  issueDate    DateTime
+  dueDate      DateTime
+  total        Float
+  currency     String            @default("USD")
+  notes        String?
+  invoiceItems InvoiceItem[]
+  invoiceHours InvoiceHour[]
+  discounts    InvoiceDiscount[]
+  createdAt    DateTime          @default(now())
+  updatedAt    DateTime          @updatedAt
+}
+
+model InvoiceItem {
+  id          String   @id @default(uuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id])
+  name        String
+  description String?
+  quantity    Int
+  price       Float
+  currency    String   @default("USD")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model InvoiceHour {
+  id          String   @id @default(uuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id])
+  service     String
+  description String?
+  hours       Float
+  rate        Float
+  currency    String   @default("USD")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model InvoiceDiscount {
+  id          String       @id @default(uuid())
+  invoiceId   String
+  invoice     Invoice      @relation(fields: [invoiceId], references: [id])
+  type        DiscountType
+  value       Float
+  description String?
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+enum DiscountType {
+  FLAT_RATE
+  PERCENTAGE
+}
