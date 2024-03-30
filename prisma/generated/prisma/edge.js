@@ -18,10 +18,8 @@ const {
   objectEnumValues,
   makeStrictEnum,
   Extensions,
-  warnOnce,
   defineDmmfProperty,
   Public,
-  getRuntime
 } = require('./runtime/edge.js')
 
 
@@ -243,6 +241,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
