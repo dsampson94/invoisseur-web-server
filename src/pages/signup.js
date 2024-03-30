@@ -10,11 +10,30 @@ export default function SignupPage() {
             username: formData.get('username'),
         };
 
-        const response = await fetch('/api/auth/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(userData),
-        });
+        try {
+            const response = await fetch('/api/auth/signup', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(userData),
+            });
+
+            if (!response.ok) {
+                // If the server responded with a non-200 status, we throw an error
+                throw new Error('Failed to sign up.');
+            }
+
+            const data = await response.json();
+
+            // Handle success. For example, redirect to the login page or a welcome page
+            // window.location.href = '/welcome';
+            console.log('Signup successful:', data);
+
+            // Optionally, clear the form fields here
+        } catch (error) {
+            // Handle errors, such as displaying a message to the user
+            console.error('Signup error:', error);
+            alert('Signup failed. Please try again.');
+        }
     };
 
     return (

@@ -4,7 +4,7 @@ import bcrypt from 'bcryptjs';
 import prisma from '../../../../lib/prisma';
 
 export default async function handle(req, res) {
-    console.log(`Request method: ${ req.method }`); // Log the request method
+    console.log(`Request method: ${ req.method }`);
     console.log('Request body:', req.body);
     const { email, password, username } = req.body;
 
