@@ -14,11 +14,14 @@ const {
   join,
   raw,
   Decimal,
+  Debug,
   objectEnumValues,
   makeStrictEnum,
   Extensions,
+  warnOnce,
   defineDmmfProperty,
   Public,
+  getRuntime
 } = require('./runtime/library.js')
 
 
@@ -241,7 +244,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": true,
+  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
@@ -263,7 +266,7 @@ if (!fs.existsSync(path.join(__dirname, 'schema.prisma'))) {
     "prisma/generated/prisma",
     "generated/prisma",
   ]
-
+  
   const alternativePath = alternativePaths.find((altPath) => {
     return fs.existsSync(path.join(process.cwd(), altPath, 'schema.prisma'))
   }) ?? alternativePaths[0]
