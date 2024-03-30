@@ -1,5 +1,3 @@
-'use client'
-
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
@@ -7,69 +5,58 @@ const Background = () => {
   const svgRef = useRef(null);
 
   useEffect(() => {
-    // Ensure the SVG fills the viewport
-    const updateDimensions = () => {
-      const width = window.innerWidth;
-      const height = window.innerHeight;
-      d3.select(svgRef.current).attr('width', width).attr('height', height);
-    };
-
-    window.addEventListener('resize', updateDimensions);
-    updateDimensions(); // Initial dimension set
-
     const svg = d3.select(svgRef.current);
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
-    // Function to create ripples
-    function createRipple(event) {
-      const [x, y] = d3.pointer(event, svgRef.current);
-      const width = window.innerWidth;
-      const height = window.innerHeight;
+    // Set the dimensions of the SVG
+    svg.attr('width', width).attr('height', height);
 
-      // Edge detection: Allow ripples only within 60 pixels of the screen edges
-      const edgeThreshold = 360; // Pixels from each edge where ripples are allowed
-
-      // Check if the event is within 60 pixels of any edge
-      const isNearEdge =
-        x <= edgeThreshold ||
-        x >= width - edgeThreshold ||
-        y <= edgeThreshold ||
-        y >= height - edgeThreshold;
-
-      if (isNearEdge) {
-        // Generate multiple circles for a single ripple to enhance the fluid effect
-        for (let i = 0; i < 3; i++) {
-          const delay = i * 100; // Stagger the start of each circle's animation
-          const initialRadius = i * 2; // Slightly larger initial radius for subsequent circles
-
-          svg.append('circle')
+    // Function to add and animate a circle
+    const addCircle = () => {
+      const x = Math.random() * width;
+      const y = Math.random() * height;
+      const dx = (Math.random() - 0.5) * 2;
+      const dy = (Math.random() - 0.5) * 2;
+      const circle = svg.append('circle')
           .attr('cx', x)
           .attr('cy', y)
-          .attr('r', 1 + initialRadius)
-          .style('stroke', 'white')
-          .style('stroke-opacity', 0.8 - i * 0.3) // Decrease opacity for subsequent circles
-            .style('fill', 'none')
-            .transition()
-          .delay(delay)
-          .duration(2000 + delay) // Longer duration for a smoother, more gradual expansion
-            .ease(d3.easeCubicOut)
-            .attr('r', 100 + initialRadius * 10) // Larger final radius for a more expansive ripple
-            .style('stroke-opacity', 0)
-            .remove();
+          .attr('r', 5)
+          .style('fill', 'white');
+
+      // Function to update position
+      const updatePosition = () => {
+        circle.attr('cx', parseFloat(circle.attr('cx')) + dx)
+            .attr('cy', parseFloat(circle.attr('cy')) + dy);
+
+        // Remove the circle if it goes out of bounds
+        if (parseFloat(circle.attr('cx')) > width || parseFloat(circle.attr('cx')) < 0 || parseFloat(circle.attr('cy')) > height || parseFloat(circle.attr('cy')) < 0) {
+          circle.remove();
         }
-      }
-    }
+      };
 
-    // Binding the event listener
-    svg.on('mousemove', createRipple);
+      // Update the position every 60ms
+      const intervalId = setInterval(updatePosition, 60);
 
-    // Cleanup function to remove event listener
+      // Accelerate on mouseover
+      circle.on('mouseover', () => {
+        clearInterval(intervalId); // Clear the existing interval
+        // Start a new interval with a shorter delay to speed up the animation
+        setInterval(updatePosition, 20);
+      });
+    };
+
+    // Add a new circle every 1000ms
+    const addCircleInterval = setInterval(addCircle, 1000);
+
+    // Cleanup
     return () => {
-      window.removeEventListener('resize', updateDimensions);
-      svg.on('mousemove', null);
+      clearInterval(addCircleInterval);
+      svg.selectAll('circle').remove(); // Remove all circles
     };
   }, []);
 
-  return <svg ref={svgRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: 0, width: '100%', height: '100%' }} />;
+  return <svg ref={svgRef} style={{ position: 'fixed', top: 0, left: 0, zIndex: -1, width: '100%', height: '100%' }} />;
 };
 
 export default Background;

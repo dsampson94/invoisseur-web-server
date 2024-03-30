@@ -1,4 +1,4 @@
-// src/pages/signup.js
+// src/pages/signup.jsx
 
 export default function SignupPage() {
     const handleSubmit = async (event) => {
