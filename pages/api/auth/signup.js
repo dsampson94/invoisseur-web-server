@@ -1,7 +1,7 @@
 // src/pages/api/auth/signup.js
 
 import bcrypt from 'bcryptjs';
-import prisma from '../../../../lib/prisma';
+import prisma from '../../../lib/prisma';
 
 export default async function handle(req, res) {
     const { email, password, username } = req.body;
