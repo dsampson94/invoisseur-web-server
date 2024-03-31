@@ -1,7 +1,7 @@
-import Login from '../../pages/login';
+import LandingPage from '../../pages/landing';
 
 export default async function Home() {
     return (
-       <Login/>
+       <LandingPage/>
     );
 }

@@ -26,7 +26,7 @@ function TabPanel(props) {
     );
 }
 
-const Login = () => {
+const LoginPage = () => {
     const [value, setValue] = useState(0);
     const [signInEmail, setSignInEmail] = useState('');
     const [signInPassword, setSignInPassword] = useState('');
@@ -173,4 +173,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default LoginPage;

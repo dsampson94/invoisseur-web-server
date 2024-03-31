@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 
@@ -10,7 +12,8 @@ const Background = () => {
     const height = window.innerHeight;
 
     // Set the dimensions of the SVG
-    svg.attr('width', width).attr('height', height);
+    svg.attr('width', width).attr('height', height).style('background-color', '#1a252f')
+        .style('box-shadow', 'inset 3px 3px 6px #131a21, inset -3px -3px 6px #212e3d');
 
     // Function to add and animate a circle
     const addCircle = () => {
@@ -21,7 +24,7 @@ const Background = () => {
       const circle = svg.append('circle')
           .attr('cx', x)
           .attr('cy', y)
-          .attr('r', 5)
+          .attr('r', 2)
           .style('fill', 'white');
 
       // Function to update position
