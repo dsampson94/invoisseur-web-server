@@ -20,7 +20,7 @@ const InvoiceUserCompanyDetailsForm = ({ userDetails, setUserDetails, companyDet
     };
 
     return (
-        <>
+        <Box display="flex" flexDirection="column">
             <FormHeader
                 title="Add My Details"
                 buttonText="Save"
@@ -155,29 +155,6 @@ const InvoiceUserCompanyDetailsForm = ({ userDetails, setUserDetails, companyDet
                             margin="dense"
                         />
                     </Grid>
-                    <Grid item xs={ 12 }>
-                        <TextField
-                            name="industry"
-                            label="Industry"
-                            value={ companyDetails.industry }
-                            onChange={ handleCompanyChange }
-                            fullWidth
-                            size="small"
-                            margin="dense"
-                        />
-                    </Grid>
-                    <Grid item xs={ 12 }>
-                        <TextField
-                            name="companySize"
-                            label="Company Size"
-                            value={ companyDetails.companySize }
-                            onChange={ handleCompanyChange }
-                            fullWidth
-                            size="small"
-                            margin="dense"
-                            type="number"
-                        />
-                    </Grid>
                     {/*<Grid item xs={ 12 } sx={ { mt: 2 } }>*/ }
                     {/*    <Button*/ }
                     {/*        variant="contained"*/ }
@@ -189,7 +166,7 @@ const InvoiceUserCompanyDetailsForm = ({ userDetails, setUserDetails, companyDet
                     {/*</Grid>*/ }
                 </Grid>
             </Box>
-        </>
+        </Box>
     );
 };
 

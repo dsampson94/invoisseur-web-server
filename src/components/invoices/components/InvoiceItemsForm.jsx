@@ -7,7 +7,7 @@ import FormHeader from '@/components/invoices/components/FormHeader';
 
 const InvoiceItemsForm = ({ items, onItemChange, onAddItem, onRemoveItem, onFormSave }) => {
     return (
-        <>
+        <Box display="flex" flexDirection="column">
             <FormHeader
                 title="Add Invoice Items"
                 buttonText="Save"
@@ -52,7 +52,7 @@ const InvoiceItemsForm = ({ items, onItemChange, onAddItem, onRemoveItem, onForm
                     </Grid>
                 )) }
             </Box>
-        </>
+        </Box>
     );
 };
 

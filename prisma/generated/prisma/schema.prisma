@@ -27,26 +27,24 @@ model User {
 
 model UserCompany {
   id          String   @id @default(uuid())
+  name        String
   userId      String   @unique
   user        User     @relation(fields: [userId], references: [id])
-  name        String
   taxId       String?
   address     String
   email       String?
   phoneNumber String?
   website     String?
   logo        String?
-  industry    String?
-  companySize Int?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
 }
 
 model Client {
   id              String    @id @default(uuid())
+  name            String
   userId          String
   user            User      @relation(fields: [userId], references: [id])
-  name            String
   email           String?
   phoneNumber     String?
   billingAddress  String?
@@ -59,6 +57,7 @@ model Client {
 
 model Invoice {
   id           String            @id @default(uuid())
+  name         String
   clientId     String
   userId       String
   client       Client            @relation(fields: [clientId], references: [id])
@@ -77,9 +76,9 @@ model Invoice {
 
 model InvoiceItem {
   id          String   @id @default(uuid())
+  name        String
   invoiceId   String
   invoice     Invoice  @relation(fields: [invoiceId], references: [id])
-  name        String
   description String?
   quantity    Int
   price       Float
@@ -103,6 +102,7 @@ model InvoiceHour {
 
 model InvoiceDiscount {
   id          String       @id @default(uuid())
+  name        String
   invoiceId   String
   invoice     Invoice      @relation(fields: [invoiceId], references: [id])
   type        DiscountType

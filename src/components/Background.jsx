@@ -12,7 +12,7 @@ const Background = () => {
     const height = window.innerHeight;
 
     // Set the dimensions of the SVG
-    svg.attr('width', width).attr('height', height).style('background-color', '#1a252f')
+    svg.attr('width', width).attr('height', height).style('background-color', '#2c3e50')
         .style('box-shadow', 'inset 3px 3px 6px #131a21, inset -3px -3px 6px #212e3d');
 
     // Function to add and animate a circle

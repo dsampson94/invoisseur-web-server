@@ -12,7 +12,7 @@ const InvoiceClientDetailsForm = ({ clientDetails, setClientDetails, onFormSave 
     };
 
     return (
-        <>
+        <Box display="flex" flexDirection="column">
             <FormHeader
                 title="Add My Client Details"
                 buttonText="Save"
@@ -23,11 +23,22 @@ const InvoiceClientDetailsForm = ({ clientDetails, setClientDetails, onFormSave 
                         <TextField
                             fullWidth
                             size="small"
-                            label="Name"
+                            label="Company Name"
                             name="name"
                             value={ clientDetails.name }
                             onChange={ handleChange }
                             required
+                            margin="dense"
+                        />
+                    </Grid>
+                    <Grid item xs={ 12 }>
+                        <TextField
+                            fullWidth
+                            size="small"
+                            label="Contact Person"
+                            name="contactPerson"
+                            value={ clientDetails.contactPerson }
+                            onChange={ handleChange }
                             margin="dense"
                         />
                     </Grid>
@@ -64,28 +75,6 @@ const InvoiceClientDetailsForm = ({ clientDetails, setClientDetails, onFormSave 
                             margin="dense"
                         />
                     </Grid>
-                    <Grid item xs={ 12 }>
-                        <TextField
-                            fullWidth
-                            size="small"
-                            label="Shipping Address"
-                            name="shippingAddress"
-                            value={ clientDetails.shippingAddress }
-                            onChange={ handleChange }
-                            margin="dense"
-                        />
-                    </Grid>
-                    <Grid item xs={ 12 }>
-                        <TextField
-                            fullWidth
-                            size="small"
-                            label="Contact Person"
-                            name="contactPerson"
-                            value={ clientDetails.contactPerson }
-                            onChange={ handleChange }
-                            margin="dense"
-                        />
-                    </Grid>
                     {/*<Grid item xs={ 12 }>*/ }
                     {/*    <Button type="submit" variant="contained" color="primary">*/ }
                     {/*        Save*/ }
@@ -93,7 +82,7 @@ const InvoiceClientDetailsForm = ({ clientDetails, setClientDetails, onFormSave 
                     {/*</Grid>*/ }
                 </Grid>
             </Box>
-        </>
+        </Box>
     );
 };
 

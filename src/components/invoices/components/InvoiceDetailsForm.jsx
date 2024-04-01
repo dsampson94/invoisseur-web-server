@@ -2,9 +2,9 @@ import React from 'react';
 import { Box, TextField } from '@mui/material';
 import FormHeader from '@/components/invoices/components/FormHeader';
 
-const InvoiceDetailsForm = ({ userName, setUserName, clientName, setClientName, invoiceName, setInvoiceName, handleSubmit, onFormSave }) => {
+const InvoiceDetailsForm = ({ userName, setUserName, clientName, setClientName, invoiceName, setInvoiceName, onFormSave }) => {
     return (
-        <>
+        <Box display="flex" flexDirection="column">
             <FormHeader
                 title="Let's begin!"
                 buttonText="Save"
@@ -49,7 +49,7 @@ const InvoiceDetailsForm = ({ userName, setUserName, clientName, setClientName, 
                 {/*    Generate PDF*/ }
                 {/*</Button>*/ }
             </Box>
-        </>
+        </Box>
     );
 };
 

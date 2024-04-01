@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PDFDownloadLink } from '@react-pdf/renderer';
-import { Container, Grid, Paper, Step, StepButton, Stepper } from '@mui/material';
+import { Container, Grid, Paper, Step, StepButton, StepLabel, Stepper } from '@mui/material';
 import InvoicePDF from '@/components/invoices/default';
 import dynamic from 'next/dynamic';
 import InvoiceUserCompanyDetailsForm from '@/components/invoices/components/InvoiceUserCompanyDetailsForm';
@@ -15,9 +15,10 @@ const PDFViewer = dynamic(
     { ssr: false }
 );
 
-const steps = ['Invoice Details', 'Invoice Items', 'Company Details', 'Client Details'];
-
 const InvoiceCreatePage = () => {
+    const steps = ['Invoice Details', 'Invoice Items', 'Company Details', 'Client Details'];
+    const [completedSteps, setCompletedSteps] = useState({});
+
     const [activeStep, setActiveStep] = useState(0);
     const [items, setItems] = useState([{ name: '', amount: '' }]);
     const [taxRate, setTaxRate] = useState(0.1);
@@ -42,9 +43,7 @@ const InvoiceCreatePage = () => {
         email: '',
         phoneNumber: '',
         website: '',
-        logo: '',
-        industry: '',
-        companySize: ''
+        logo: ''
     });
 
     const [clientDetails, setClientDetails] = useState({
@@ -84,67 +83,80 @@ const InvoiceCreatePage = () => {
         return calculateSubtotal() + calculateTaxAmount();
     };
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-    };
+    const handleSaveForm = () => handleComplete(activeStep);
 
     const handleStep = (step) => () => {
+        const newCompletedSteps = { ...completedSteps, [activeStep]: true };
+        setCompletedSteps(newCompletedSteps);
         setActiveStep(step);
     };
 
+    const [completed, setCompleted] = useState({});
+
+    const handleComplete = (step) => {
+        const newCompleted = { ...completed, [step]: true };
+        setCompleted(newCompleted);
+        if (step < steps.length - 1) {
+            setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        }
+    };
+
+    const getStepContent = (stepIndex) => {
+        switch (stepIndex) {
+            case 0:
+                return <InvoiceDetailsForm userName={ userName }
+                                           setUserName={ setUserName }
+                                           clientName={ clientName }
+                                           setClientName={ setClientName }
+                                           invoiceName={ invoiceName }
+                                           setInvoiceName={ setInvoiceName }
+                                           onFormSave={ handleSaveForm } />;
+            case 1:
+                return <InvoiceItemsForm items={ items }
+                                         onAddItem={ handleAddItem }
+                                         onItemChange={ handleItemChange }
+                                         onRemoveItem={ handleRemoveItem }
+                                         onFormSave={ handleSaveForm } />;
+            case 2:
+                return <InvoiceUserCompanyDetailsForm userDetails={ userDetails }
+                                                      setUserDetails={ setUserDetails }
+                                                      companyDetails={ companyDetails }
+                                                      setCompanyDetails={ setCompanyDetails }
+                                                      onFormSave={ handleSaveForm } />;
+            case 3:
+                return <InvoiceClientDetailsForm clientDetails={ clientDetails }
+                                                 setClientDetails={ setClientDetails }
+                                                 onFormSave={ handleSaveForm } />;
+            default:
+                return 'Unknown step';
+        }
+    };
+
     return (
-        <Container maxWidth="lg" sx={ { p: 3, overflow: 'hidden' } }>
-            <Grid container spacing={ 2 }>
-                <Grid item xs={ 12 } md={ 6 } sx={ { p: 2, maxHeight: '450px' } }>
-                    <Paper elevation={ 4 } sx={ {
-                        p: 2,
-                        borderRadius: '8px',
-                        bgcolor: 'background.default',
-                        boxShadow: '0px 0px 32px black',
-                    } }>
-                        <Stepper sx={ { pb: 2 } } nonLinear activeStep={ activeStep } alternativeLabel>
+        <Container maxWidth="xxl" sx={ { p: 2, overflow: 'hidden', maxHeight: 'auto' } }>
+
+            {/* Main content */ }
+            <Paper elevation={ 4 } sx={ { overflowY: 'auto', p: 2, borderRadius: '8px', boxShadow: '0px 0px 16px black', maxHeight: '64vh' } }>
+                <Grid container spacing={ 2 }>
+                    {/* Left container for forms */ }
+                    <Grid item display="flex" flexDirection="row" xs={ 12 } md={ 8 }>
+                        {/* Stepper */ }
+                        <Stepper nonLinear activeStep={ activeStep } orientation="vertical" sx={ {  minWidth: '160px' } }>
                             { steps.map((label, index) => (
-                                <Step key={ label } completed={ index < activeStep }>
-                                    <StepButton onClick={ handleStep(index) }>{ label }</StepButton>
+                                <Step key={ label } completed={ !!completed[index] }>
+                                    <StepButton onClick={ handleStep(index) }>
+                                        <StepLabel>{ label }</StepLabel>
+                                    </StepButton>
                                 </Step>
                             )) }
                         </Stepper>
-                        { activeStep === 0 &&
-                            <InvoiceDetailsForm
-                                userName={ userName }
-                                setUserName={ setUserName }
-                                clientName={ clientName }
-                                setClientName={ setClientName }
-                                invoiceName={ invoiceName }
-                                setInvoiceName={ setInvoiceName }
-                                handleSubmit={ handleSubmit }
-                            /> }
-                        { activeStep === 1 &&
-                            <InvoiceItemsForm
-                                items={ items }
-                                onAddItem={ handleAddItem }
-                                onItemChange={ handleItemChange }
-                                onRemoveItem={ handleRemoveItem } /> }
-                        { activeStep === 2 &&
-                            <InvoiceUserCompanyDetailsForm
-                                userDetails={ userDetails }
-                                setUserDetails={ setUserDetails }
-                                companyDetails={ companyDetails }
-                                setCompanyDetails={ setCompanyDetails } /> }
-                        { activeStep === 3 &&
-                            <InvoiceClientDetailsForm
-                                clientDetails={ clientDetails }
-                                setClientDetails={ setClientDetails } /> }
-                    </Paper>
-                </Grid>
 
-                <Grid item xs={ 12 } md={ 6 } sx={ { p: 2, maxHeight: '450px' } }>
-                    <Paper elevation={ 4 } sx={ {
-                        borderRadius: '8px',
-                        bgcolor: 'background.default',
-                        boxShadow: '0px 0px 32px black',
-                    } }>
-                        <PDFViewer width="100%" height="450px">
+                        { getStepContent(activeStep) }
+                    </Grid>
+
+                    {/* Right container for PDF preview */ }
+                    <Grid item xs={ 12 } md={ 4 }>
+                        <PDFViewer width="100%" height="300px">
                             <InvoicePDF invoiceData={ {
                                 clientName,
                                 items,
@@ -154,10 +166,11 @@ const InvoiceCreatePage = () => {
                                 total: calculateTotal()
                             } } />
                         </PDFViewer>
-                    </Paper>
+                    </Grid>
                 </Grid>
-            </Grid>
+            </Paper>
 
+            {/* Download link */ }
             { clientName && items.length > 0 && (
                 <PDFDownloadLink document={ <InvoicePDF
                     invoiceData={ { clientName, items, subtotal: calculateSubtotal(), taxRate, taxAmount: calculateTaxAmount(), total: calculateTotal() } } /> }

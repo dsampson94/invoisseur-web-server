@@ -135,24 +135,22 @@ exports.Prisma.UserScalarFieldEnum = {
 
 exports.Prisma.UserCompanyScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
   name: 'name',
+  userId: 'userId',
   taxId: 'taxId',
   address: 'address',
   email: 'email',
   phoneNumber: 'phoneNumber',
   website: 'website',
   logo: 'logo',
-  industry: 'industry',
-  companySize: 'companySize',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
 
 exports.Prisma.ClientScalarFieldEnum = {
   id: 'id',
-  userId: 'userId',
   name: 'name',
+  userId: 'userId',
   email: 'email',
   phoneNumber: 'phoneNumber',
   billingAddress: 'billingAddress',
@@ -164,6 +162,7 @@ exports.Prisma.ClientScalarFieldEnum = {
 
 exports.Prisma.InvoiceScalarFieldEnum = {
   id: 'id',
+  name: 'name',
   clientId: 'clientId',
   userId: 'userId',
   issueDate: 'issueDate',
@@ -177,8 +176,8 @@ exports.Prisma.InvoiceScalarFieldEnum = {
 
 exports.Prisma.InvoiceItemScalarFieldEnum = {
   id: 'id',
-  invoiceId: 'invoiceId',
   name: 'name',
+  invoiceId: 'invoiceId',
   description: 'description',
   quantity: 'quantity',
   price: 'price',
@@ -201,6 +200,7 @@ exports.Prisma.InvoiceHourScalarFieldEnum = {
 
 exports.Prisma.InvoiceDiscountScalarFieldEnum = {
   id: 'id',
+  name: 'name',
   invoiceId: 'invoiceId',
   type: 'type',
   value: 'value',
